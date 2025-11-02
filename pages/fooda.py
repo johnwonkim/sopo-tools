@@ -146,7 +146,7 @@ If information is not available, use empty strings or omit fields."""
                                 
                                 # Build label in the format expected by create_labels_doc
                                 label_lines = [name]
-                                label_lines.append('{order_group_id} - {order_id}')
+                                label_lines.append(f'{order_group_id} - {order_id}')
                                 label_lines.append(order_date)
                                 label_lines.extend([
                                     "-------------------------------------",
