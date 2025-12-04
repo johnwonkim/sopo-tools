@@ -65,6 +65,31 @@ if uploaded_file and client:
                             "type": "text",
                             "text": """Extract order label information from the following PDF pages. Analyze all pages and provide a comprehensive extraction of all order details.
 
+    IMPORTANT: Potentially multiple orders of the same menu item.
+    
+    You may see multiple orders of the same menu item for the same customer. This is normal and should result in multiple `items` entries in the result. Note that each item should represent a single quantity of a menu item.
+
+    For example, if the PDF shows 3 orders like:
+    - John Doe (1 of 3) - Coke
+    - John Doe (2 of 3) - Coke
+    - John Doe (3 of 3) - Diet Coke
+
+    The resulting `items` array should be:
+    [
+        {
+            "menu_item": "Coke",
+            "modifications": ""
+        },
+        {
+            "menu_item": "Coke",
+            "modifications": ""
+        },
+        {
+            "menu_item": "Diet Coke",
+            "modifications": ""
+        }
+    ]
+
     Return the result as a JSON array of orders with the following structure:
     [
         {
@@ -75,9 +100,8 @@ if uploaded_file and client:
             "delivery_name": "Delivery Name/Address",
             "items": [
                 {
-                "quantity": "Quantity of the item",
-                "menu_item": "Menu Item Name (e.g. Beef Bulgogi Signature Plate)",
-                "modifications": "Modifications or special instructions (if any)"
+                    "menu_item": "Menu Item Name (e.g. Beef Bulgogi Signature Plate)",
+                    "modifications": "Modifications or special instructions (if any)",
                 }
             ]
         }
@@ -138,12 +162,11 @@ if uploaded_file and client:
                 total_items = len(items)
                 
                 for idx, item in enumerate(items, start=1):
-                    qty = item.get("quantity", "1")
                     menu_item = item.get("menu_item", "")
                     modifications = item.get("modifications", "")
                     
                     # Build item text
-                    item_lines = [f"{qty} {menu_item}"]
+                    item_lines = [f"1 {menu_item}"]
                     if modifications:
                         item_lines.append(f"Mods: {modifications}")
                     
