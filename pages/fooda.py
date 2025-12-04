@@ -150,7 +150,7 @@ if uploaded_file and client:
                     item_text = "\n".join(item_lines)
                     
                     # Build label in the format expected by create_labels_doc
-                    label_lines = [name]
+                    label_lines = [f"{name} - {order_group_id}"]
                     label_lines.append(f'{order_group_id} - {order_id}')
                     label_lines.append(order_date)
                     label_lines.extend([
